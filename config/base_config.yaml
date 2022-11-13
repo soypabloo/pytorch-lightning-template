@@ -1,0 +1,56 @@
+project: sts
+name: shchoi
+path:
+    train_path: /opt/ml/wandb_base_project/data/train_auged.csv
+    dev_path: /opt/ml/wandb_base_project/data/dev.csv
+    test_path: /opt/ml/wandb_base_project/data/dev.csv
+    predict_path: /opt/ml/wandb_base_project/data/test.csv
+
+data:
+    shuffle: True
+    augmentation: # adea, bt 등등
+
+metric: PearsonCorrCoef
+model:
+    model_name: beomi/KcELECTRA-base
+    saved_name: base_model
+
+train:
+    seed: 42
+    gpus: 1
+    batch_size: 16
+    max_epoch: 30
+    learning_rate: 0.0000074842028984369805
+    logging_step: 5
+    bce: True
+    k: 1
+    split_seed: 12345
+    num_splits: 10
+
+loss: MSELoss
+
+optimizer: #torch.optim에 존재하는 optimizer만 사용가능. 함수명과 args의 이름이 정확히 일치해야 합니다.
+    name: AdamW
+    args:
+        weight_decay: 0.004585548152280841
+        amsgrad: False
+
+lr_scheduler: #torch.optim.lr_cheduler에 존재하는 lr_scheduler만 사용가능.
+    name: StepLR
+    args:
+        step_size: 30
+        gamma: 0.1
+
+call_back:
+    - name: EarlyStopping
+      args:
+          monitor: "val_pearson"
+          min_delta: 0.00
+          patience: 3
+          verbose: True
+          mode: "max"
+    - name: ModelCheckpoint
+      args:
+          monitor: "val_pearson"
+          dirpath: "./checkpoint/"
+          mode: "max"
