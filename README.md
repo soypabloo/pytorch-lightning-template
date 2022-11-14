@@ -1,7 +1,7 @@
 # pytorch-lightning-template
 
 USAGE
-    train
+train
     sh train.sh
-    inference
+inference
     sh inference
