@@ -2,6 +2,6 @@
 
 USAGE
 train
-    sh train.sh
+    ```sh train.sh```
 inference
-    sh inference
+    ```sh inference```
